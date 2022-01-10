@@ -8,7 +8,7 @@
   padding: 20px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid lightgray;
+  border-bottom: var(--border-style);
 }
 
 .chat__headerInfo {
@@ -63,7 +63,7 @@
   justify-content: space-between;
   align-items: center;
   height: 62px;
-  border-top: 1px solid lightgray;
+  border-top: var(--border-style);
 }
 
 .chat__footer > form {
@@ -77,6 +77,9 @@
   padding: 10px;
   border: none;
   outline: none;
+}
+.chat__footer > form > input:focus {
+  outline: 3px solid #00000005;
 }
 
 .chat__footer > form > button {
