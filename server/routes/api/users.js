@@ -2,6 +2,9 @@ import express from "express";
 import User from "../../models/User.js";
 import bcrypt from "bcryptjs";
 import UserDto from "../../dtos/UserDto.js";
+import jwt from "jsonwebtoken";
+import config from "config";
+import { ACCESS_TOKEN_SECRET as secretKey } from "../../env.js";
 
 const router = express.Router();
 
@@ -54,7 +57,22 @@ router.post("/", async (req, res) => {
       // Saving user in DB
       newUser
         .save()
-        .then((data) => res.status(201).json(new UserDto(data)))
+        .then((data) => {
+          jwt.sign(
+            { id: data.id },
+            config.get("secretKey"),
+            { expiresIn: "3600" },
+            (err, token) => {
+              if (err)
+                return res
+                  .status(500)
+                  .json({ errorMessage: "Error creating token" });
+
+              const user = new UserDto(data);
+              return res.status(201).json({ token: token, user: user });
+            }
+          );
+        })
         .catch((err) => res.status(500).json({ errorMessage: err }));
     });
   });
