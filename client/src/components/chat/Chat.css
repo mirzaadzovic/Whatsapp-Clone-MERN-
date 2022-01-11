@@ -39,6 +39,7 @@
   border-radius: 15px;
   background-color: #ffffff;
   margin-bottom: 30px;
+  max-width: 50%;
 }
 
 .chat__timestamp {
@@ -84,4 +85,8 @@
 
 .chat__footer > form > button {
   display: none;
+}
+
+.chat__sendBtn {
+  margin-left: 5px;
 }

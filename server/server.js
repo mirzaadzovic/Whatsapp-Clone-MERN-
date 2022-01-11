@@ -2,12 +2,16 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import Messages from "./dbMessages.js";
 import Pusher from "pusher";
+import jwt from "jsonwebtoken";
+import { ACCESS_TOKEN_SECRET as secretKey, db_url } from "./env.js";
+import users from "./routes/api/users.js";
+import messages from "./routes/api/messages.js";
 
 // app config
 const port = process.env.PORT || 8080;
 const app = express();
+
 const corsSettings = {
   origin: "http://localhost:3000",
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -25,17 +29,33 @@ const pusher = new Pusher({
 app.use(cors(corsSettings));
 app.use(express.json());
 
-// DB config
-const connection_url =
-  "mongodb+srv://yrade:PZPpzp123!@cluster0.abs3s.mongodb.net/whatsappdb?retryWrites=true&w=majority";
+// use api routes
+app.use("/api/users", users);
+app.use("/api/messages", messages);
 
-mongoose.connect(connection_url);
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["Authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (token === null) return res.sendStatus(401); //Unauthorized
+
+  jwt.verify(token, secretKey, (err, user) => {
+    if (err) return res.sendStatus(403); //Forbidden
+    req.user = user;
+    next();
+  });
+};
+
+// DB config
+
+mongoose
+  .connect(db_url)
+  .then(() => console.log("DB connected"))
+  .catch((err) => console.log(err));
 
 const db = mongoose.connection;
 
 db.once("open", () => {
-  console.log("DB connected");
-
   const msgCollection = db.collection("messagecontents");
   const changeStream = msgCollection.watch();
 
@@ -54,28 +74,15 @@ db.once("open", () => {
 });
 
 // API routes
-app.get("/", (req, res) => res.status(200).send("Hello world"));
+app.get("/", (req, res) => res.status(200).json({ key: secretKey }));
 
-app.get("/messages/sync", (req, res) => {
-  Messages.find((err, data) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(data);
-    }
-  });
+//404 route
+app.get("*", (req, res) => {
+  res.status(404).send("<h2>Error 404 - Page not found</h2>");
 });
 
-app.post("/api/v1/messages/new", (req, res) => {
-  const dbMessage = req.body;
-  Messages.create(dbMessage, (err, data) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  });
-});
+// API Users
+// app.post("/register", r);
 
 // listen
 app.listen(port, () => {
