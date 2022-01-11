@@ -56,7 +56,7 @@ mongoose
 const db = mongoose.connection;
 
 db.once("open", () => {
-  const msgCollection = db.collection("messagecontents");
+  const msgCollection = db.collection("messages");
   const changeStream = msgCollection.watch();
 
   changeStream.on("change", (change) => {

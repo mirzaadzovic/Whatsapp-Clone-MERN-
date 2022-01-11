@@ -20,7 +20,7 @@ router.post("/", (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      console.log(data);
+      console.log(`${data.name} to ${data.to} -> ${data.message}`);
       res.status(201).send(data);
     }
   });

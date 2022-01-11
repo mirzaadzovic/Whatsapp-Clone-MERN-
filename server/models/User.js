@@ -34,7 +34,10 @@ const UserSchema = new Schema({
   },
   registered_date: {
     type: Date,
-    default: Date.now,
+    default: Date.now(),
+  },
+  avatarUrl: {
+    type: String,
   },
 });
 
