@@ -4,9 +4,10 @@ import cors from "cors";
 import mongoose from "mongoose";
 import Pusher from "pusher";
 import jwt from "jsonwebtoken";
-import { ACCESS_TOKEN_SECRET as secretKey, db_url } from "./env.js";
 import users from "./routes/api/users.js";
 import messages from "./routes/api/messages.js";
+import config from "config";
+import auth from "./routes/api/auth.js";
 
 // app config
 const port = process.env.PORT || 8080;
@@ -32,6 +33,7 @@ app.use(express.json());
 // use api routes
 app.use("/api/users", users);
 app.use("/api/messages", messages);
+app.use("/auth", auth);
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["Authorization"];
@@ -49,7 +51,7 @@ const authenticateToken = (req, res, next) => {
 // DB config
 
 mongoose
-  .connect(db_url)
+  .connect(config.get("dbUrl"))
   .then(() => console.log("DB connected"))
   .catch((err) => console.log(err));
 

@@ -1,11 +1,11 @@
 import express from "express";
 import Message from "../../models/Message.js";
-import jwt from "jsonwebtoken";
+import auth from "../../middleware/auth.js";
 
 const router = express.Router();
 
 // /api/messages
-router.get("/", (req, res) => {
+router.get("/", auth, (req, res) => {
   Message.find((err, data) => {
     if (err) {
       res.status(500).send(err);
@@ -22,7 +22,7 @@ router.post("/", (req, res) => {
       res.status(500).send(err);
     } else {
       console.log(`${data.name} to ${data.to} -> ${data.message}`);
-      res.status(201).send(data);
+      res.status(201).json(data);
     }
   });
 });

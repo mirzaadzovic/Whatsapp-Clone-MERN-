@@ -1,10 +1,8 @@
 import express from "express";
 import User from "../../models/User.js";
 import bcrypt from "bcryptjs";
-import UserDto from "../../dtos/UserDto.js";
 import jwt from "jsonwebtoken";
 import config from "config";
-import { ACCESS_TOKEN_SECRET as secretKey } from "../../env.js";
 
 const router = express.Router();
 
