@@ -48,9 +48,9 @@ router.post("/login", (req, res) => {
 // API logged in user
 router.get("/user", auth, (req, res) => {
   console.log(req.user.id);
-  User.findById(req.user.id).then((user) =>
-    res.status(200).json(new UserDto(user))
-  );
+  User.findById(req.user.id)
+    .then((user) => res.status(200).json(new UserDto(user)))
+    .catch((e) => res.status(400).json({ errorMessage: "Invalid token!" }));
 });
 
 export default router;
