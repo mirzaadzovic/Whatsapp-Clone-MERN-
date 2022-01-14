@@ -36,7 +36,13 @@ router.post("/login", (req, res) => {
         { expiresIn: "1h" },
         (error, token) => {
           if (error) throw Error("Error signing token");
-          return res.status(200).json({ jwt: token });
+          return res
+            .status(200)
+            .cookie("wat", token, {
+              httpOnly: true,
+              secure: true,
+            })
+            .json(new UserDto(user));
         }
       );
     });

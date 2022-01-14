@@ -2,8 +2,8 @@ import config from "config";
 import jwt from "jsonwebtoken";
 
 const auth = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = req.cookies.wat;
+  console.log(token);
 
   try {
     // Check token

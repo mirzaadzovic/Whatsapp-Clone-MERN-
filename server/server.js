@@ -4,6 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import Pusher from "pusher";
 import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 import users from "./routes/api/users.js";
 import messages from "./routes/api/messages.js";
 import chats from "./routes/api/chats.js";
@@ -30,6 +31,7 @@ const pusher = new Pusher({
 // middleware
 app.use(cors(corsSettings));
 app.use(express.json());
+app.use(cookieParser());
 
 // use api routes
 app.use("/api/users", users);
