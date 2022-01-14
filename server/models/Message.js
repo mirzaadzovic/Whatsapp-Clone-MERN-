@@ -7,6 +7,7 @@ const MessageSchema = mongoose.Schema({
   received: Boolean,
   to: String,
   seen: Boolean,
+  chatId: String,
 });
 
 export default mongoose.model("message", MessageSchema);

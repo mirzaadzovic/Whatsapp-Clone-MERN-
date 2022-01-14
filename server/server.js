@@ -6,6 +6,7 @@ import Pusher from "pusher";
 import jwt from "jsonwebtoken";
 import users from "./routes/api/users.js";
 import messages from "./routes/api/messages.js";
+import chats from "./routes/api/chats.js";
 import config from "config";
 import auth from "./routes/api/auth.js";
 
@@ -33,6 +34,7 @@ app.use(express.json());
 // use api routes
 app.use("/api/users", users);
 app.use("/api/messages", messages);
+app.use("/api/chats", chats);
 app.use("/auth", auth);
 
 const authenticateToken = (req, res, next) => {

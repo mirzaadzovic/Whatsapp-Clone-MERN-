@@ -17,7 +17,7 @@ const Chat = ({ messages }) => {
       timestamp: new Date().toUTCString(),
       received: false,
     };
-    const res = await fetch("http://localhost:8080/api/v1/messages/new", {
+    const res = await fetch("http://localhost:8080/api/messages/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
