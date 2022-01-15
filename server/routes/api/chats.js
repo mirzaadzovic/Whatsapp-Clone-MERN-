@@ -3,6 +3,7 @@ import Chat from "../../models/Chat.js";
 import auth from "../../middleware/auth.js";
 import jwt from "jsonwebtoken";
 import config from "config";
+import ChatDto from "../../dtos/ChatDto.js";
 
 const router = express.Router();
 
@@ -15,9 +16,14 @@ router.get("/", auth, async (req, res) => {
   if (!token) return null;
   jwt.verify(token, config.get("secretKey"), (error, loggedInUser) => {
     if (error) return null;
-    const chats = data.filter((c) =>
+    const dbChats = data.filter((c) =>
       c.users.some((user) => user.id === loggedInUser.id)
     );
+    dbChats.forEach((chat) => {
+      chat.users = chat.users.filter((u) => u.id !== loggedInUser.id);
+    });
+
+    const chats = dbChats.map((chat) => new ChatDto(chat));
     return res.status(200).json(chats);
   });
 });
