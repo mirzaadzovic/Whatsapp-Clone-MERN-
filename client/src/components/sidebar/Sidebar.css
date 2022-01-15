@@ -72,3 +72,9 @@
     align-items: center;
   }
 }
+
+@media (max-width: 565px) {
+  .sidebar {
+    display: none;
+  }
+}

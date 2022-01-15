@@ -3,12 +3,13 @@ import jwt from "jsonwebtoken";
 
 const auth = (req, res, next) => {
   const token = req.cookies.wat;
-  console.log(token);
-
+  // const authHeaders = req.headers["authorization"].split(" ");
+  // const token = authHeaders || authHeaders[1];
   try {
     // Check token
     if (!token) {
       res.clearCookie("wat");
+      console.log("cookie cleared");
       return res.status(401).json({ errorMessage: "Unauthorized" });
     }
 

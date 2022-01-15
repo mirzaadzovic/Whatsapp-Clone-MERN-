@@ -20,7 +20,6 @@ router.post("/login", async (req, res) => {
       return user;
     });
 
-    console.log(user);
     if (!user)
       return res
         .status(400)
@@ -38,7 +37,10 @@ router.post("/login", async (req, res) => {
 
     return res
       .status(200)
-      .cookie("wat", token, { httpOnly: true })
+      .cookie("wat", token, {
+        httpOnly: true,
+        maxAge: 3600000, // 1h in millisecons
+      })
       .json({ token: token, user: new UserDto(user) });
   } catch (err) {
     return res.send(500).json({ errorMessage: err });
@@ -47,7 +49,6 @@ router.post("/login", async (req, res) => {
 
 // API logged in user
 router.get("/user", auth, (req, res) => {
-  console.log(req.user.id);
   User.findById(req.user.id)
     .then((user) => res.status(200).json(new UserDto(user)))
     .catch((e) => res.status(400).json({ errorMessage: "Invalid token!" }));

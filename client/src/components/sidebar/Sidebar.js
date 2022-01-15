@@ -6,13 +6,18 @@ import DonutLargeIcon from "@mui/icons-material/DonutLarge";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import SidebarChat from "../sidebarChat/SidebarChat";
+import { useSelector } from "react-redux";
+import { selectLoggedInUser } from "../../reducers/userSlice";
+import { selectChats } from "../../reducers/chatSlice";
 
 const Sidebar = () => {
+  const user = useSelector(selectLoggedInUser);
+  const chats = useSelector(selectChats);
   return (
     <div className="sidebar">
       <div className="sidebar__header">
         <div className="sidebar__headerLeft">
-          <Avatar src="https://e0.365dm.com/21/02/768x432/skysports-nba-los-angeles-lakers_5268563.jpg?20210211081745" />
+          <Avatar src={user?.avatarUrl} />
         </div>
         <div className="sidebar__headerRight">
           <IconButton>
@@ -35,12 +40,9 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar__chats">
-        <SidebarChat />
-        <SidebarChat />
-        <SidebarChat />
-        <SidebarChat />
-        <SidebarChat />
-        <SidebarChat />
+        {chats.map((chat) => (
+          <SidebarChat user={chat.withUser} lastMessage="Kakav si brate" />
+        ))}
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ const app = express();
 const corsSettings = {
   origin: "http://localhost:3000",
   methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
 };
 
 const pusher = new Pusher({
@@ -30,6 +31,7 @@ const pusher = new Pusher({
 
 // middleware
 app.use(cors(corsSettings));
+app.use(express.urlencoded({ extended: true })); // support URL-encoded bodies
 app.use(express.json());
 app.use(cookieParser());
 

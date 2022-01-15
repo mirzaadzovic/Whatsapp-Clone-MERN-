@@ -1,18 +1,23 @@
 import { Button } from "@mui/material";
-import React, { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import axios from "../../axios";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../reducers/userSlice";
-import Cookie from "universal-cookie";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cookies = new Cookie();
+
+  useEffect(async () => {
+    const response = await axios
+      .get("/auth/user")
+      .catch((err) => console.log(err));
+    if (response.status === 200) navigate("/");
+  }, []);
 
   const login = async (e) => {
     e.preventDefault();
@@ -22,17 +27,11 @@ const Login = () => {
         password: password,
       })
       .then((res) => {
-        console.log(res.data.token);
-        cookies.set("wap", res.data.token, {
-          path: "/",
-          httpOnly: true,
-        });
-        cookies.set("dsfsdf", res.data.token, { httpOnly: true, path: "/" });
         return res.data.user;
       })
       .catch((err) => err);
-    console.log(response);
-    if (response.id) {
+
+    if (response?.id) {
       dispatch(logIn(Object(response)));
       navigate("/");
     } else setPassword("");

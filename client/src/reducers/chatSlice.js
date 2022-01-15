@@ -8,6 +8,7 @@ export const chatSlice = createSlice({
     messages: [],
   },
   reducers: {
+    setChats: (state, action) => ({ ...state, chats: action.payload }),
     newChat: (state, action) => ({
       ...state,
       chats: [action.payload, ...state.chats],
@@ -19,7 +20,7 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { newChat, newMessage } = chatSlice.actions;
+export const { newChat, newMessage, setChats } = chatSlice.actions;
 
 export const selectChats = (state) => state.chat.chats;
 export const selectMessages = (state) => state.chat.messages;

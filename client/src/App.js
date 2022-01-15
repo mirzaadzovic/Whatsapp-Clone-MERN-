@@ -3,19 +3,27 @@ import "./App.css";
 import Chat from "./components/chat/Chat";
 import Sidebar from "./components/sidebar/Sidebar";
 import Pusher from "pusher-js";
-import axios from "./axios";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import Login from "./components/login/Login";
 import AppBody from "./AppBody";
 import Register from "./components/register/Register";
+import { logIn, selectLoggedInUser } from "./reducers/userSlice";
+import axios from "./axios";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 function App() {
   const [messages, setMessages] = useState([]);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    axios.get("/api/messages/").then((response) => setMessages(response.data));
+  useEffect(async () => {
+    axios
+      .get("/auth/user", { withCredentials: true })
+      .then((res) => {
+        dispatch(logIn(res.data));
+      })
+      .catch((err) => err);
   }, []);
-
   useEffect(() => {
     const pusher = new Pusher("92f428a20d5de670ac76", { cluster: "eu" });
 
