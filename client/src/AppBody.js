@@ -7,7 +7,7 @@ import { logIn, selectLoggedInUser } from "./reducers/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "./axios";
-import { setChats } from "./reducers/chatSlice";
+import { setChats, setOpenedChat } from "./reducers/chatSlice";
 
 const AppBody = ({ messages }) => {
   const navigate = useNavigate();
@@ -29,8 +29,9 @@ const AppBody = ({ messages }) => {
     if (response.status === 200) {
       response = await axios.get("/api/chats", { withCredentials: true });
       const chats = response.data;
-      console.log(chats);
+
       dispatch(setChats(chats));
+      dispatch(setOpenedChat(chats[0]));
     }
   }, []);
 

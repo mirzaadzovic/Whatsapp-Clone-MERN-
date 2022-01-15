@@ -7,23 +7,39 @@ import SendIcon from "@mui/icons-material/Send";
 import { Avatar, Icon, IconButton } from "@mui/material";
 import React, { useState } from "react";
 import "./Chat.css";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  newMessage,
+  selectMessages,
+  selectOpenedChat,
+} from "../../reducers/chatSlice";
+import { selectLoggedInUser } from "../../reducers/userSlice";
+import axios from "../../axios";
 
-const Chat = ({ messages }) => {
+const Chat = () => {
   const [msg, setMsg] = useState("");
+  const messages = useSelector(selectMessages);
+  const user = useSelector(selectLoggedInUser);
+  const openedChat = useSelector(selectOpenedChat);
+  const dispatch = useDispatch();
   const sendMessage = async () => {
-    const data = {
-      name: "Mirza",
+    const newMsg = {
+      name: user.username,
       message: msg,
       timestamp: new Date().toUTCString(),
-      received: false,
+      chatId: openedChat.id,
+      seen: false,
+      to: openedChat.withUser,
     };
-    const res = await fetch("http://localhost:8080/api/messages/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+
+    console.log("IDEE poost");
+    const response = await axios
+      .post("/api/messages", newMsg, { withCredentials: true })
+      .catch((err) => console.log(err));
+
+    if (response.status === 201) {
+      dispatch(newMessage(response.data));
+    }
 
     setMsg("");
   };
@@ -35,10 +51,10 @@ const Chat = ({ messages }) => {
   return (
     <div className="chat">
       <div className="chat__header">
-        <Avatar />
+        <Avatar src={openedChat?.withUser?.avatarUrl} />
 
         <div className="chat__headerInfo">
-          <h3>Room name</h3>
+          <h3>{openedChat?.withUser?.username}</h3>
           <p>Last seen at...</p>
         </div>
 
@@ -61,7 +77,7 @@ const Chat = ({ messages }) => {
             <p
               key={message._id}
               className={`chat__message ${
-                !message.received && "chat__receiver"
+                message.name === user.username && "chat__receiver"
               }`}
             >
               <span className="chat__name">{message.name}</span>

@@ -13,6 +13,7 @@ import { selectChats } from "../../reducers/chatSlice";
 const Sidebar = () => {
   const user = useSelector(selectLoggedInUser);
   const chats = useSelector(selectChats);
+
   return (
     <div className="sidebar">
       <div className="sidebar__header">
@@ -41,7 +42,12 @@ const Sidebar = () => {
 
       <div className="sidebar__chats">
         {chats.map((chat) => (
-          <SidebarChat user={chat.withUser} lastMessage="Kakav si brate" />
+          <SidebarChat
+            key={chat.id}
+            user={chat.withUser}
+            lastMessage="jebem ti familiju"
+            chat={chat}
+          />
         ))}
       </div>
     </div>

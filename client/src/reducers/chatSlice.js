@@ -4,6 +4,7 @@ import axios from "../axios";
 export const chatSlice = createSlice({
   name: "chat",
   initialState: {
+    openedChat: null,
     chats: [],
     messages: [],
   },
@@ -17,13 +18,20 @@ export const chatSlice = createSlice({
       ...state,
       messages: [...state.messages, action.payload],
     }),
+    setMessages: (state, action) => ({ ...state, messages: action.payload }),
+    setOpenedChat: (state, action) => ({
+      ...state,
+      openedChat: action.payload,
+    }),
   },
 });
 
-export const { newChat, newMessage, setChats } = chatSlice.actions;
+export const { newChat, newMessage, setChats, setMessages, setOpenedChat } =
+  chatSlice.actions;
 
 export const selectChats = (state) => state.chat.chats;
 export const selectMessages = (state) => state.chat.messages;
+export const selectOpenedChat = (state) => state.chat.openedChat;
 
 export default chatSlice.reducer;
 

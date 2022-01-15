@@ -4,8 +4,7 @@ const MessageSchema = mongoose.Schema({
   message: String,
   name: String,
   timestamp: String,
-  received: Boolean,
-  to: String,
+  to: Object,
   seen: Boolean,
   chatId: String,
 });
