@@ -8,12 +8,16 @@
 
 .sidebarChat__info {
   margin-left: 15px;
-  text-overflow: ellipsis;
 }
 
 .sidebarChat__info > h3 {
   font-size: 16px;
   margin-bottom: 5px;
+}
+
+.sidebarChat__info > p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sidebarChat:hover {

@@ -96,7 +96,7 @@ const Chat = () => {
         <form onSubmit={submit}>
           <input
             placeholder="Type a message"
-            type="text"
+            type="textarea"
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />
