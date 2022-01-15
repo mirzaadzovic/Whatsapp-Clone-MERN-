@@ -14,6 +14,8 @@ router.get("/", auth, async (req, res) => {
 
   const token = req.cookies.wat;
   if (!token) return null;
+
+  // get chats of logged in user
   jwt.verify(token, config.get("secretKey"), (error, loggedInUser) => {
     if (error) return null;
     const dbChats = data.filter((c) =>

@@ -35,7 +35,6 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar__chats">
-        <h2>Add new Chat</h2>
         <SidebarChat />
         <SidebarChat />
         <SidebarChat />

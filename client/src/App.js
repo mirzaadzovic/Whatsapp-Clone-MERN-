@@ -4,6 +4,10 @@ import Chat from "./components/chat/Chat";
 import Sidebar from "./components/sidebar/Sidebar";
 import Pusher from "pusher-js";
 import axios from "./axios";
+import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import Login from "./components/login/Login";
+import AppBody from "./AppBody";
+import Register from "./components/register/Register";
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -28,12 +32,15 @@ function App() {
     };
   }, [messages]);
   return (
-    <div className="app">
-      <div className="app__body">
-        <Sidebar />
-        <Chat messages={messages} />
+    <BrowserRouter>
+      <div className="app">
+        <Routes>
+          <Route path="/" element={<AppBody messages={messages} />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
 

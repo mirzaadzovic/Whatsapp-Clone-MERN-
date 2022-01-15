@@ -1,0 +1,66 @@
+.register {
+  background-color: #f8f8f8;
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  place-items: center;
+}
+
+.register__container {
+  padding: 50px;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+}
+
+.register__container > h2 {
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.register__container > img {
+  height: 10rem;
+  object-fit: contain;
+  margin-bottom: 30px;
+}
+
+.register__containerInput {
+  width: 100%;
+  background-color: rgb(230, 228, 228);
+  margin: 7px 0px;
+
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: 2px 3px 3px -1px rgba(0, 0, 0, 0.199);
+}
+
+.register__containerInput > input {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  font-size: 16px;
+}
+.register__containerInput > input:focus {
+  outline: 2px solid rgba(79, 142, 201, 0.404);
+  transition: 0.05s;
+  box-shadow: none;
+}
+
+.register__container > button {
+  margin-top: 10px;
+  width: 100%;
+  text-transform: inherit !important;
+  background-color: rgba(17, 134, 42, 0.781) !important;
+  color: white !important;
+  box-shadow: 2px 3px 5px 1px rgba(0, 0, 0, 0.199);
+}
+
+.register__container > a {
+  text-decoration: none;
+  color: rgb(79, 142, 201);
+  font-size: x-small;
+}

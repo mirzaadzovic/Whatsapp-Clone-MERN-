@@ -80,13 +80,19 @@ db.once("open", () => {
 });
 
 // API routes
-app.get("/", (req, res) => res.status(200).json({ key: secretKey }));
+app.get("/", (req, res) => res.status(200).send("WhatsApp API"));
+
+app.get("/cookie", (req, res) => {
+  return res
+    .status(200)
+    .cookie("testni", "adilesgsgsrg", { httpOnly: true })
+    .send("Eo ga");
+});
 
 //404 route
 app.get("*", (req, res) => {
   res.status(404).send("<h2>Error 404 - Page not found</h2>");
 });
-
 // API Users
 // app.post("/register", r);
 

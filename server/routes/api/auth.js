@@ -10,42 +10,36 @@ const router = express.Router();
 
 // api login
 
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
     // Does user exist
-    User.findOne({ username }).then(async (user) => {
-      if (!user)
-        return res
-          .status(400)
-          .json({ errorMessage: "Wrong username or password" });
-
-      // Password validation
-      const doesItMatch = await bcrypt.compare(password, user.passwordHash);
-      console.log(doesItMatch);
-      if (!doesItMatch)
-        return res
-          .status(400)
-          .json({ errorMessage: "Wrong username or password" });
-
-      //Generate JWT
-      jwt.sign(
-        { id: user.id },
-        config.get("secretKey"),
-        { expiresIn: 3600 },
-        (error, token) => {
-          if (error) throw Error("Error signing token");
-          return res
-            .status(200)
-            .cookie("wat", token, {
-              httpOnly: true,
-              secure: process.env.PORT || false,
-            })
-            .json(new UserDto(user));
-        }
-      );
+    const user = await User.findOne({ username }).then(async (user) => {
+      if (!user) return null;
+      return user;
     });
+
+    console.log(user);
+    if (!user)
+      return res
+        .status(400)
+        .json({ errorMessage: "Wrong username or password" });
+    // Password validation
+    const doesItMatch = await bcrypt.compare(password, user.passwordHash);
+
+    if (!doesItMatch)
+      return res.json({ errorMessage: "Wrong username or password" });
+
+    //Generate JWT
+    const token = jwt.sign({ id: user.id }, config.get("secretKey"), {
+      expiresIn: 3600,
+    });
+
+    return res
+      .status(200)
+      .cookie("wat", token, { httpOnly: true })
+      .json({ token: token, user: new UserDto(user) });
   } catch (err) {
     return res.send(500).json({ errorMessage: err });
   }
@@ -59,13 +53,4 @@ router.get("/user", auth, (req, res) => {
     .catch((e) => res.status(400).json({ errorMessage: "Invalid token!" }));
 });
 
-export const getLoggedUserId = (token) => {
-  if (!token) return null;
-  jwt.verify(token, config.get("secretKey"), (error, user) => {
-    if (error) return null;
-
-    console.log(user.id);
-    return user.id;
-  });
-};
 export default router;
