@@ -33,14 +33,14 @@ router.post("/login", (req, res) => {
       jwt.sign(
         { id: user.id },
         config.get("secretKey"),
-        { expiresIn: "1h" },
+        { expiresIn: 3600 },
         (error, token) => {
           if (error) throw Error("Error signing token");
           return res
             .status(200)
             .cookie("wat", token, {
               httpOnly: true,
-              secure: true,
+              secure: process.env.PORT || false,
             })
             .json(new UserDto(user));
         }
@@ -59,4 +59,13 @@ router.get("/user", auth, (req, res) => {
     .catch((e) => res.status(400).json({ errorMessage: "Invalid token!" }));
 });
 
+export const getLoggedUserId = (token) => {
+  if (!token) return null;
+  jwt.verify(token, config.get("secretKey"), (error, user) => {
+    if (error) return null;
+
+    console.log(user.id);
+    return user.id;
+  });
+};
 export default router;

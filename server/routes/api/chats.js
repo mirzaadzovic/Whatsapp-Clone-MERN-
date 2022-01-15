@@ -1,17 +1,25 @@
 import express from "express";
 import Chat from "../../models/Chat.js";
 import auth from "../../middleware/auth.js";
+import jwt from "jsonwebtoken";
+import config from "config";
 
 const router = express.Router();
 
 // GET chats
-router.get("/:userId", auth, async (req, res) => {
-  const { userId } = req.params;
+router.get("/", auth, async (req, res) => {
   const data = await Chat.find();
-
   if (!data) return res.status(404).json({});
-  const chats = data.filter((c) => c.users.some((user) => user.id === userId));
-  return res.status(200).json(chats);
+
+  const token = req.cookies.wat;
+  if (!token) return null;
+  jwt.verify(token, config.get("secretKey"), (error, loggedInUser) => {
+    if (error) return null;
+    const chats = data.filter((c) =>
+      c.users.some((user) => user.id === loggedInUser.id)
+    );
+    return res.status(200).json(chats);
+  });
 });
 
 // POST chat
