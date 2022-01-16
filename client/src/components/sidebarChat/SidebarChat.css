@@ -16,8 +16,10 @@
 }
 
 .sidebarChat__info > p {
+  max-width: 150px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  overflow: hidden;
 }
 
 .sidebarChat:hover {

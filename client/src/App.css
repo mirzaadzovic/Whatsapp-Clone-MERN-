@@ -14,6 +14,10 @@
   animation: chatsLoad 0.5s linear;
 }
 
+.btn--hidden {
+  display: none;
+}
+
 @keyframes chatsLoad {
   0% {
     transform: translate(0, 10px);

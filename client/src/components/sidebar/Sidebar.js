@@ -45,8 +45,9 @@ const Sidebar = () => {
           <SidebarChat
             key={chat.id}
             user={chat.withUser}
-            lastMessage="jebem ti familiju"
+            lastMessage={chat.lastMessage.message}
             chat={chat}
+            you={chat.lastMessage.name === user.username}
           />
         ))}
       </div>

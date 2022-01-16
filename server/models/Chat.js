@@ -10,6 +10,10 @@ const chat = new Schema({
   lastMessage: {
     type: Object,
   },
+  dateUpdated: {
+    type: Date,
+    required: true,
+  },
 });
 
 export default mongoose.model("chat", chat);

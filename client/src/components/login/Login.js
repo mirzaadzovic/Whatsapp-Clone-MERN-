@@ -15,12 +15,15 @@ const Login = () => {
 
   useEffect(async () => {
     const user = await AuthService.getUser();
+    console.clear();
+
     if (user) navigate("/");
   }, []);
 
   const login = async (e) => {
     e.preventDefault();
     const user = await AuthService.login(username, password);
+    console.log(user);
 
     if (user) {
       dispatch(logIn(user));

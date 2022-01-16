@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Chat from "./components/chat/Chat";
 import Sidebar from "./components/sidebar/Sidebar";
@@ -10,17 +10,24 @@ import Register from "./components/register/Register";
 import { logIn, selectLoggedInUser } from "./reducers/userSlice";
 import axios from "./axios";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { newMessage } from "./reducers/chatSlice";
+import { newMessage, setChats } from "./reducers/chatSlice";
+import useSound from "use-sound";
+import newMsgSound from "./assets/new-message.mp3";
+import APIService from "./services/APIService";
 
 function App() {
   const dispatch = useDispatch();
+
   useEffect(() => {
     const pusher = new Pusher("92f428a20d5de670ac76", { cluster: "eu" });
 
     const channel = pusher.subscribe("messages");
-    channel.bind("inserted", (newMsg) => {
+    channel.bind("inserted", async (newMsg) => {
       dispatch(newMessage(newMsg));
+      const chats = await APIService.getFromRoute("/api/chats/");
+      if (chats) {
+        dispatch(setChats(chats));
+      }
     });
 
     return () => {
@@ -29,6 +36,7 @@ function App() {
       pusher.unsubscribe("messages");
     };
   }, []);
+
   return (
     <BrowserRouter>
       <div className="app">

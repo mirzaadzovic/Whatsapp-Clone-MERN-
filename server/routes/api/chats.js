@@ -25,7 +25,9 @@ router.get("/", auth, async (req, res) => {
       chat.users = chat.users.filter((u) => u.id !== loggedInUser.id);
     });
 
-    const chats = dbChats.map((chat) => new ChatDto(chat));
+    const chats = dbChats
+      .map((chat) => new ChatDto(chat))
+      .sort((a, b) => b.dateUpdated - a.dateUpdated);
     return res.status(200).json(chats);
   });
 });
@@ -45,6 +47,16 @@ router.post("/", auth, async (req, res) => {
   });
 
   chat.save().then((chats) => res.status(201).json(chats));
+});
+
+// update chat
+router.put("/:id", async (req, res) => {
+  const { id, message } = req.body;
+
+  await Chat.updateOne(
+    { _id: id },
+    { lastMessage: message, dateUpdated: Date.now() }
+  ).catch((err) => err);
 });
 
 // Does chat between these users already exists

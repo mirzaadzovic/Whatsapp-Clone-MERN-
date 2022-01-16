@@ -1,0 +1,49 @@
+.message {
+  position: relative;
+  font-size: 16px;
+  padding: 10px;
+  width: fit-content;
+  border-radius: 15px;
+  background-color: #ffffff;
+  margin-bottom: 30px;
+  max-width: 50%;
+  word-wrap: break-word;
+}
+
+.message__timestamp {
+  margin-left: 10px;
+  font-size: xx-small;
+  position: absolute;
+  color: gray;
+}
+
+.message__name {
+  position: absolute;
+  top: -15px;
+  font-weight: 800;
+  font-size: x-small;
+}
+
+.message__receiver {
+  margin-left: auto;
+  background-color: #dcf8c6;
+}
+
+.message > .message__timestamp {
+  right: -110px;
+  bottom: 30%;
+}
+.message__receiver > .message__timestamp {
+  right: 0px;
+  left: -120px;
+  bottom: 30%;
+}
+
+@keyframes popup {
+  0% {
+    transform: translate(0, 10px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}

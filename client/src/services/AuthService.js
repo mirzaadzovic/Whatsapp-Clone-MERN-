@@ -13,10 +13,14 @@ class AuthService {
 
   static login = async (username, password) => {
     const response = await axios
-      .post("/auth/login", { username: username, password: password })
+      .post(
+        "/auth/login",
+        { username: username, password: password },
+        { withCredentials: true }
+      )
       .catch((err) => null);
 
-    if (response?.status === 201) {
+    if (response?.status === 200) {
       const user = response.data;
       return user;
     }
