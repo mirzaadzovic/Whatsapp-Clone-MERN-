@@ -74,6 +74,9 @@ db.once("open", () => {
         name: messageDetails.name,
         message: messageDetails.message,
         timestamp: messageDetails.timestamp,
+        chatId: messageDetails.chatId,
+        _id: messageDetails._id,
+        to: messageDetails._id,
       });
     } else {
       console.log("Error triggering pusher");

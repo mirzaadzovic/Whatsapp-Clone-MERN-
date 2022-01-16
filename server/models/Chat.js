@@ -7,6 +7,9 @@ const chat = new Schema({
     required: true,
     type: Array,
   },
+  lastMessage: {
+    type: Object,
+  },
 });
 
 export default mongoose.model("chat", chat);

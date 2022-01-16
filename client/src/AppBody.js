@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Chat from "./components/chat/Chat";
 import Sidebar from "./components/sidebar/Sidebar";
@@ -7,33 +7,36 @@ import { logIn, selectLoggedInUser } from "./reducers/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "./axios";
-import { setChats, setOpenedChat } from "./reducers/chatSlice";
+import { setChats, setMessages, setOpenedChat } from "./reducers/chatSlice";
+import APIService from "./services/APIService";
+import AuthService from "./services/AuthService";
 
 const AppBody = ({ messages }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(async () => {
-    let response = await axios
-      .get("/auth/user", { withCredentials: true })
-      .catch((err) => {
-        console.error(err);
-        navigate("/login");
-      });
+    const user = await AuthService.getUser();
 
-    const user = response.data;
-    console.log(user);
+    if (user) {
+      dispatch(logIn(user));
 
-    dispatch(logIn(user));
-
-    if (response.status === 200) {
-      response = await axios.get("/api/chats", { withCredentials: true });
-      const chats = response.data;
+      const chats = await APIService.getFromRoute("/api/chats");
+      const messages = await APIService.getMessages(chats[0]);
+      console.log(chats[0]);
 
       dispatch(setChats(chats));
       dispatch(setOpenedChat(chats[0]));
+      dispatch(setMessages(messages));
+      setLoading(false);
+    } else {
+      navigate("/login");
+      setLoading(false);
     }
   }, []);
+
+  if (loading) return <h2>Loading...</h2>;
 
   return (
     <div className="app__body">

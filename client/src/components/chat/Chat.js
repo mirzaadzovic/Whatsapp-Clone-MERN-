@@ -37,16 +37,16 @@ const Chat = () => {
       .post("/api/messages", newMsg, { withCredentials: true })
       .catch((err) => console.log(err));
 
-    if (response.status === 201) {
-      dispatch(newMessage(response.data));
-    }
+    // if (response.status === 201) {
+    //   dispatch(newMessage(response.data));
+    // }
 
     setMsg("");
   };
 
   async function submit(e) {
     e.preventDefault();
-    await sendMessage();
+    if (msg) await sendMessage();
   }
   return (
     <div className="chat">
@@ -80,7 +80,7 @@ const Chat = () => {
                 message.name === user.username && "chat__receiver"
               }`}
             >
-              <span className="chat__name">{message.name}</span>
+              {/* <span className="chat__name">{message.name}</span> */}
               {message.message}
               <span className="chat__timestamp">{message.timestamp}</span>
             </p>

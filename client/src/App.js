@@ -11,26 +11,16 @@ import { logIn, selectLoggedInUser } from "./reducers/userSlice";
 import axios from "./axios";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { newMessage } from "./reducers/chatSlice";
 
 function App() {
-  const [messages, setMessages] = useState([]);
   const dispatch = useDispatch();
-
-  useEffect(async () => {
-    axios
-      .get("/auth/user", { withCredentials: true })
-      .then((res) => {
-        dispatch(logIn(res.data));
-      })
-      .catch((err) => err);
-  }, []);
   useEffect(() => {
     const pusher = new Pusher("92f428a20d5de670ac76", { cluster: "eu" });
 
     const channel = pusher.subscribe("messages");
-    channel.bind("inserted", (newMessage) => {
-      console.log(newMessage);
-      setMessages([...messages, newMessage]);
+    channel.bind("inserted", (newMsg) => {
+      dispatch(newMessage(newMsg));
     });
 
     return () => {
@@ -38,12 +28,12 @@ function App() {
       channel.unsubscribe();
       pusher.unsubscribe("messages");
     };
-  }, [messages]);
+  }, []);
   return (
     <BrowserRouter>
       <div className="app">
         <Routes>
-          <Route path="/" element={<AppBody messages={messages} />} />
+          <Route path="/" element={<AppBody />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

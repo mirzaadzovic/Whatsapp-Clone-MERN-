@@ -5,6 +5,7 @@ import "./Login.css";
 import axios from "../../axios";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../reducers/userSlice";
+import AuthService from "../../services/AuthService";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -13,26 +14,16 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(async () => {
-    const response = await axios
-      .get("/auth/user")
-      .catch((err) => console.log(err));
-    if (response.status === 200) navigate("/");
+    const user = await AuthService.getUser();
+    if (user) navigate("/");
   }, []);
 
   const login = async (e) => {
     e.preventDefault();
-    const response = await axios
-      .post("/auth/login", {
-        username: username,
-        password: password,
-      })
-      .then((res) => {
-        return res.data.user;
-      })
-      .catch((err) => err);
+    const user = await AuthService.login(username, password);
 
-    if (response?.id) {
-      dispatch(logIn(Object(response)));
+    if (user) {
+      dispatch(logIn(user));
       navigate("/");
     } else setPassword("");
   };

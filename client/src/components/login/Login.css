@@ -39,12 +39,12 @@
   outline: none;
   border: none;
   width: 100%;
-  padding: 8px;
+  padding: 15px;
   border-radius: 10px;
   font-size: 16px;
 }
 .login__containerInput > input:focus {
-  outline: 2px solid rgba(79, 142, 201, 0.404);
+  outline: 2px solid lightgray;
   transition: 0.05s;
   box-shadow: none;
 }

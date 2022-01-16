@@ -1,29 +1,23 @@
 import { Avatar } from "@mui/material";
 import React from "react";
 import "./SidebarChat.css";
-import axios from "../../axios";
 import { useDispatch } from "react-redux";
+import APIService from "../../services/APIService";
 import { setMessages, setOpenedChat } from "../../reducers/chatSlice";
 
 const SidebarChat = ({ user, lastMessage, chat }) => {
   const dispatch = useDispatch();
-  const fetchMessages = async () => {
-    const response = await axios
-      .get(`/api/messages/${chat.id}`, {
-        withCredentials: true,
-      })
-      .catch((err) => console.error(err));
 
-    if (response.status === 200) {
-      const messages = response.data;
-      console.log(messages);
-      dispatch(setMessages(messages));
+  const selectChat = async () => {
+    const messages = await APIService.getMessages(chat);
+    if (messages) {
       dispatch(setOpenedChat(chat));
+      dispatch(setMessages(messages));
     }
   };
 
   return (
-    <div className="sidebarChat" onClick={() => fetchMessages()}>
+    <div className="sidebarChat" onClick={selectChat}>
       <Avatar src={user?.avatarUrl} />
       <div className="sidebarChat__info">
         <h3>{user?.username}</h3>
