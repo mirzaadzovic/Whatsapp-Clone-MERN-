@@ -5,7 +5,7 @@
   width: fit-content;
   border-radius: 15px;
   background-color: #ffffff;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   max-width: 50%;
   word-wrap: break-word;
 }
@@ -30,13 +30,13 @@
 }
 
 .message > .message__timestamp {
-  right: -110px;
-  bottom: 30%;
+  right: -75px;
+  bottom: 40%;
 }
 .message__receiver > .message__timestamp {
   right: 0px;
-  left: -120px;
-  bottom: 30%;
+  left: -85px;
+  bottom: 40%;
 }
 
 @keyframes popup {

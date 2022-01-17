@@ -1,0 +1,18 @@
+.searchUser {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid lightgray;
+  background-color: white;
+  padding: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.searchUser:hover {
+  background-color: #f8f8f8;
+}
+
+.searchUser > h5 {
+  margin-left: 10px;
+  flex: 1;
+}

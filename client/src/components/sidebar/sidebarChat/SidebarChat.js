@@ -2,8 +2,8 @@ import { Avatar } from "@mui/material";
 import React from "react";
 import "./SidebarChat.css";
 import { useDispatch } from "react-redux";
-import APIService from "../../services/APIService";
-import { setMessages, setOpenedChat } from "../../reducers/chatSlice";
+import APIService from "../../../services/APIService";
+import { setMessages, setOpenedChat } from "../../../reducers/chatSlice";
 import { useNavigate } from "react-router-dom";
 
 const SidebarChat = ({ user, lastMessage, chat, you }) => {
@@ -22,7 +22,7 @@ const SidebarChat = ({ user, lastMessage, chat, you }) => {
 
   return (
     <div className="sidebarChat" onClick={selectChat}>
-      <Avatar src={user?.avatarUrl} />
+      <Avatar className="sidebarChat__avatar" src={user?.avatarUrl} />
       <div className="sidebarChat__info">
         <h3>{user?.username}</h3>
         <p>{`${you ? "You: " : ""}${lastMessage}`}</p>

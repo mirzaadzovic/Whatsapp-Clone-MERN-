@@ -1,9 +1,9 @@
 export default function dateFormatter(date) {
   date = new Date(date);
   let options = {
-    weekday: "long",
+    weekday: "short",
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
   };
   return date.toLocaleDateString("en-US", options);

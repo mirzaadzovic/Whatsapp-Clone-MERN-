@@ -8,8 +8,11 @@ import UserDto from "../../dtos/UserDto.js";
 const router = express.Router();
 
 // /api/users
-router.get("/", async (req, res) => {
-  const result = await User.find().sort({ date: -1 });
+router.get("/:username?", async (req, res) => {
+  const { username } = req.params;
+  let result = await User.find().sort({ date: -1 });
+  if (username)
+    result = result.filter((u) => u.username.includes(username.toLowerCase()));
   const users = result.map((user) => new UserDto(user));
   return res.status(200).json(users);
 });

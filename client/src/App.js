@@ -27,6 +27,7 @@ function App() {
       const chats = await APIService.getFromRoute("/api/chats/");
       if (chats) {
         dispatch(setChats(chats));
+        console.log("REFRESH CHATS");
       }
     });
 

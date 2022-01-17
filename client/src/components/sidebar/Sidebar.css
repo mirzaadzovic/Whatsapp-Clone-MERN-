@@ -25,6 +25,11 @@
   background-color: #f6f6f6;
   padding: 10px;
   height: 39px;
+  flex-direction: column;
+}
+
+.sidebar__dialog {
+  width: 100%;
 }
 
 .sidebar__searchContainer {

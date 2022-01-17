@@ -43,10 +43,13 @@ router.post("/", auth, async (req, res) => {
       .json({ errorMessage: "Chat between these users already exists" });
 
   const chat = new Chat({
-    users,
+    users: users,
+    lastMessage: { message: "" },
+    dateUpdated: Date.now(),
   });
 
-  chat.save().then((chats) => res.status(201).json(chats));
+  chat.save().then((c) => console.log("Chat added"));
+  return res.status(201).json(new ChatDto(chat));
 });
 
 // update chat

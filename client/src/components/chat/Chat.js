@@ -12,6 +12,7 @@ import {
   newMessage,
   selectMessages,
   selectOpenedChat,
+  setOpenedChat,
 } from "../../reducers/chatSlice";
 import { selectLoggedInUser } from "../../reducers/userSlice";
 import axios from "../../axios";
@@ -25,13 +26,26 @@ const Chat = () => {
   const user = useSelector(selectLoggedInUser);
   const openedChat = useSelector(selectOpenedChat);
   // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const sendMessage = async () => {
+    let chatId = openedChat.id;
+    if (messages.length === 0) {
+      const chat = await APIService.post("/api/chats", {
+        users: [user, openedChat.withUser],
+        lastMessage: { message: "" },
+      });
+      dispatch(setOpenedChat(chat));
+
+      console.log(chat);
+      chatId = chat.id;
+    }
+
     const newMsg = {
       name: user.username,
       message: msg,
       timestamp: new Date(),
-      chatId: openedChat.id,
+      chatId: chatId,
       seen: false,
       to: openedChat.withUser,
     };
@@ -39,7 +53,7 @@ const Chat = () => {
     await APIService.post("/api/messages", newMsg);
     setMsg("");
 
-    await APIService.put("/api/chats", { id: openedChat.id, message: newMsg });
+    await APIService.put("/api/chats", { id: chatId, message: newMsg });
 
     // if (response.status === 201) {
     //   dispatch(newMessage(response.data));

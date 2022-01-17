@@ -1,0 +1,11 @@
+.searchDialog {
+  width: 100%;
+  z-index: 100;
+  margin-top: 5px;
+}
+
+.searchDialog__users {
+  overflow-y: scroll;
+  max-height: 400px;
+  background-color: white;
+}

@@ -25,3 +25,7 @@
 .sidebarChat:hover {
   background-color: #ebebeb;
 }
+
+.sidebarChat__avatar {
+  z-index: 9 !important;
+}
