@@ -55,9 +55,9 @@ const Chat = () => {
 
     await APIService.put("/api/chats", { id: chatId, message: newMsg });
 
-    // if (response.status === 201) {
-    //   dispatch(newMessage(response.data));
-    // }
+    if (response.status === 201) {
+      dispatch(newMessage(response.data));
+    }
   };
 
   async function submit(e) {

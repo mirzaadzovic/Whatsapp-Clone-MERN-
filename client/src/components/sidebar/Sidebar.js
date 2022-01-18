@@ -34,9 +34,14 @@ const Sidebar = () => {
   };
   const search = async (value) => {
     dispatch(setSearchInput(value));
-    let users = await APIService.getFromRoute(`/api/users/${value}`);
+    let users = value
+      ? await APIService.post(`/api/users/${value}`, {
+          user: user,
+          existingUserIds: chats.map((c) => c.withUser.id),
+        })
+      : null;
 
-    users = filterSearch(users);
+    //users = filterSearch(users);
     dispatch(setSearchUsers(users));
   };
   const logout = async () => {

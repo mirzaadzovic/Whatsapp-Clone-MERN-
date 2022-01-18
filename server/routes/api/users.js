@@ -4,6 +4,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import config from "config";
 import UserDto from "../../dtos/UserDto.js";
+import Chat from "../../models/Chat.js";
+import ChatDto from "../../dtos/ChatDto.js";
+import auth from "../../middleware/auth.js";
 
 const router = express.Router();
 
@@ -11,10 +14,32 @@ const router = express.Router();
 router.get("/:username?", async (req, res) => {
   const { username } = req.params;
   let result = await User.find().sort({ date: -1 });
-  if (username)
+  if (username) {
     result = result.filter((u) => u.username.includes(username.toLowerCase()));
+  }
   const users = result.map((user) => new UserDto(user));
   return res.status(200).json(users);
+});
+
+router.post("/:username", auth, async (req, res) => {
+  const { user, existingUserIds } = req.body;
+  console.log(existingUserIds);
+  const { username } = req.params;
+
+  let result = await User.find().sort({ date: -1 });
+  if (username) {
+    result = result.filter((u) => u.username.includes(username.toLowerCase()));
+
+    result = result.filter(
+      (u) =>
+        u.username.includes(username.toLowerCase()) &&
+        u.id !== user.id &&
+        !existingUserIds.includes(u.id)
+    );
+  }
+  const users = result.map((user) => new UserDto(user));
+  //console.log(users);
+  return res.status(201).json(users);
 });
 
 router.get("/:id", async (req, res) => {

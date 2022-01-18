@@ -9,20 +9,22 @@ import AppBody from "./AppBody";
 import Register from "./components/register/Register";
 import { logIn, selectLoggedInUser } from "./reducers/userSlice";
 import axios from "./axios";
-import { useDispatch } from "react-redux";
-import { newMessage, setChats } from "./reducers/chatSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { newMessage, selectOpenedChat, setChats } from "./reducers/chatSlice";
 import useSound from "use-sound";
 import newMsgSound from "./assets/new-message.mp3";
 import APIService from "./services/APIService";
 
 function App() {
   const dispatch = useDispatch();
+  const openedChat = useSelector(selectOpenedChat);
 
   useEffect(() => {
     const pusher = new Pusher("92f428a20d5de670ac76", { cluster: "eu" });
 
     const channel = pusher.subscribe("messages");
     channel.bind("inserted", async (newMsg) => {
+      console.log(newMsg);
       dispatch(newMessage(newMsg));
       const chats = await APIService.getFromRoute("/api/chats/");
       if (chats) {
