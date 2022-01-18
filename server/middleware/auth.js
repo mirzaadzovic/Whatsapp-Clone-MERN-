@@ -5,6 +5,7 @@ const auth = (req, res, next) => {
   const token = req.cookies.wat;
   // const authHeaders = req.headers["authorization"].split(" ");
   // const token = authHeaders || authHeaders[1];
+  console.log(token);
   try {
     // Check token
     if (!token) {

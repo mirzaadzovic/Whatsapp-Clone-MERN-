@@ -4,7 +4,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import MicIcon from "@mui/icons-material/Mic";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import SendIcon from "@mui/icons-material/Send";
-import { Avatar, Icon, IconButton } from "@mui/material";
+import { Avatar, Icon, IconButton, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import "./Chat.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -114,13 +114,15 @@ const Chat = () => {
         </form>
 
         {msg && (
-          <IconButton
-            className="chat__sendBtn"
-            disabled={!msg}
-            onClick={() => sendMessage()}
-          >
-            <SendIcon />
-          </IconButton>
+          <Tooltip title="Send">
+            <IconButton
+              className="chat__sendBtn"
+              disabled={!msg}
+              onClick={() => sendMessage()}
+            >
+              <SendIcon />
+            </IconButton>
+          </Tooltip>
         )}
 
         <IconButton>

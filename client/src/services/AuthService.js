@@ -26,6 +26,10 @@ class AuthService {
     }
     return null;
   };
+
+  static logout = async () => {
+    await axios.get("/auth/logout").catch((err) => null);
+  };
 }
 
 export default AuthService;

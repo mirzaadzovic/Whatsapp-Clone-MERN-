@@ -47,6 +47,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/logout", (req, res) => {
+  return res.status(200).clearCookie("wat");
+});
 // API logged in user
 router.get("/user", auth, (req, res) => {
   User.findById(req.user.id)

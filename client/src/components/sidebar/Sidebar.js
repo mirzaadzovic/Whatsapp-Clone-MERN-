@@ -3,22 +3,25 @@ import "./Sidebar.css";
 import { IconButton, Avatar } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import DonutLargeIcon from "@mui/icons-material/DonutLarge";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import SidebarChat from "./sidebarChat/SidebarChat";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoggedInUser } from "../../reducers/userSlice";
 import { selectChats } from "../../reducers/chatSlice";
 import SearchDialog from "./searchDialog/SearchDialog";
-import SelectInput from "@mui/material/Select/SelectInput";
+import LogoutIcon from "@mui/icons-material/Logout";
+import Tooltip from "@mui/material/Tooltip/Tooltip";
 import {
   selectSearchInput,
   setSearchInput,
   setSearchUsers,
 } from "../../reducers/searchSlice";
 import APIService from "../../services/APIService";
+import AuthService from "../../services/AuthService";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
   const chats = useSelector(selectChats);
@@ -26,17 +29,19 @@ const Sidebar = () => {
 
   const filterSearch = (users) => {
     return (users = users.filter(
-      (u) => u.id !== user.id && chats.some((c) => c.withUser.id !== u.id)
+      (u) => u.id !== user.id && !chats.some((c) => c.withUser.id === u.id)
     ));
   };
   const search = async (value) => {
     dispatch(setSearchInput(value));
     let users = await APIService.getFromRoute(`/api/users/${value}`);
 
-    users = users.filter(
-      (u) => u.id !== user.id && !chats.some((c) => c.withUser.id === u.id)
-    );
+    users = filterSearch(users);
     dispatch(setSearchUsers(users));
+  };
+  const logout = async () => {
+    await AuthService.logout();
+    navigate("/login");
   };
 
   return (
@@ -52,9 +57,15 @@ const Sidebar = () => {
           <IconButton>
             <ChatIcon className="sidebar__headerIcon" />
           </IconButton>
-          <IconButton>
-            <MoreVertIcon className="sidebar__headerIcon" />
-          </IconButton>
+          <Tooltip title="Logout" arrow>
+            <IconButton
+              onClick={async () => {
+                await AuthService.logout();
+              }}
+            >
+              <LogoutIcon className="sidebar__headerIcon" />
+            </IconButton>
+          </Tooltip>
         </div>
       </div>
 
